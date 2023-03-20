@@ -47,6 +47,7 @@ import { useDisconnectWallet } from '@cow/modules/wallet'
 import { getConnectionName, getIsCoinbaseWallet, getIsMetaMask } from '@cow/modules/wallet/api/utils/connection'
 import { injectedConnection } from '@cow/modules/wallet/web3-react/connection/injected'
 import { walletConnectConnection } from '@cow/modules/wallet/web3-react/connection/walletConnect'
+import { walletConnectConnectionV2 } from '@cow/modules/wallet/web3-react/connection/walletConnectV2'
 import { coinbaseWalletConnection } from '@cow/modules/wallet/web3-react/connection/coinbase'
 import { fortmaticConnection } from '@cow/modules/wallet/web3-react/connection/formatic'
 import { useWalletDetails } from '@cow/modules/wallet/api/hooks'
@@ -160,10 +161,9 @@ export function AccountDetails({
     // In case the wallet is connected via WalletConnect and has wallet name set, add the suffix to be clear
     // This to avoid confusion for instance when using Metamask mobile
     // When name is not set, it defaults to WalletConnect already
-    const walletConnectSuffix =
-      getWeb3ReactConnection(connector) === walletConnectConnection && walletDetails?.walletName
-        ? ' (via WalletConnect)'
-        : ''
+    const connectionType = getWeb3ReactConnection(connector)
+    const isWalletConnect = connectionType === walletConnectConnection || connectionType === walletConnectConnectionV2
+    const walletConnectSuffix = isWalletConnect && walletDetails?.walletName ? ' (via WalletConnect)' : ''
 
     return (
       <WalletName>

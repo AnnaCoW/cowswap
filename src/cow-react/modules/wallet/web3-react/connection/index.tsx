@@ -10,10 +10,12 @@ import { ConnectionType } from '../../api/types'
 import { CoinbaseWalletOption } from './coinbase'
 import { InjectedOption, InstallMetaMaskOption, MetaMaskOption, OpenMetaMaskMobileOption } from './injected'
 import { WalletConnectOption } from './walletConnect'
+import { WalletConnectV2Option } from './walletConnectV2'
 import { gnosisSafeConnection } from './safe'
 import { injectedConnection } from './injected'
 import { coinbaseWalletConnection } from './coinbase'
 import { walletConnectConnection } from './walletConnect'
+import { walletConnectConnectionV2 } from './walletConnectV2'
 import { fortmaticConnection } from './formatic'
 import { networkConnection } from './network'
 import { ZengoOption } from './zengo'
@@ -30,6 +32,7 @@ const CONNECTIONS: Web3ReactConnection[] = [
   walletConnectConnection,
   fortmaticConnection,
   networkConnection,
+  walletConnectConnectionV2,
 ]
 
 export function isChainAllowed(connector: Connector, chainId: number) {
@@ -41,6 +44,7 @@ export function isChainAllowed(connector: Connector, chainId: number) {
     case walletConnectConnection.connector:
     case networkConnection.connector:
     case gnosisSafeConnection.connector:
+    case walletConnectConnectionV2.connector:
       return ALL_SUPPORTED_CHAIN_IDS.includes(chainId)
     default:
       return false
@@ -62,6 +66,8 @@ export function getWeb3ReactConnection(c: Connector | ConnectionType): Web3React
         return coinbaseWalletConnection
       case ConnectionType.WALLET_CONNECT:
         return walletConnectConnection
+      case ConnectionType.WALLET_CONNECT_V2:
+        return walletConnectConnectionV2
       case ConnectionType.ZENGO:
         return walletConnectConnection
       case ConnectionType.FORTMATIC:
@@ -117,6 +123,9 @@ export function ConnectWalletOptions({ tryActivation, isOpen }: { tryActivation:
   const walletConnectionOption =
     (!isInjectedMobileBrowser && <WalletConnectOption tryActivation={tryActivation} />) ?? null
 
+  const walletConnectionV2Option =
+    (!isInjectedMobileBrowser && <WalletConnectV2Option tryActivation={tryActivation} />) ?? null
+
   const zengoOption = (!isInjectedMobileBrowser && <ZengoOption tryActivation={tryActivation} />) ?? null
   const ambireOption = (!isInjectedMobileBrowser && <AmbireOption tryActivation={tryActivation} />) ?? null
   // TODO: should be enabled once the Android issue is fixed https://github.com/AlphaWallet/alpha-wallet-android/issues/3139
@@ -126,6 +135,7 @@ export function ConnectWalletOptions({ tryActivation, isOpen }: { tryActivation:
     <>
       {injectedOption}
       {walletConnectionOption}
+      {walletConnectionV2Option}
       {coinbaseWalletOption}
       {viewAll && (
         <>
