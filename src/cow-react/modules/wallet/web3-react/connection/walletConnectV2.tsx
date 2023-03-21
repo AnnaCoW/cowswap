@@ -20,6 +20,7 @@ import { default as WalletConnectV2Image } from '@cow/modules/wallet/api/assets/
 import { WC_DISABLED_TEXT } from '@cow/modules/wallet/constants'
 
 const WC_PROJECT_ID = process.env.REACT_APP_WC_PROJECT_ID
+const WC_DEFAULT_PROJECT_ID = 'a6cc11517a10f6f12953fd67b1eb67e7'
 
 export const walletConnectV2Option = {
   color: '#4196FC',
@@ -32,7 +33,7 @@ export const [web3WalletConnectV2, web3WalletConnectV2Hooks] = initializeConnect
     new WalletConnectV2({
       actions,
       options: {
-        projectId: WC_PROJECT_ID || '',
+        projectId: WC_PROJECT_ID || WC_DEFAULT_PROJECT_ID,
         chains: Object.keys(RPC_URLS).map(Number),
       },
       onError,
